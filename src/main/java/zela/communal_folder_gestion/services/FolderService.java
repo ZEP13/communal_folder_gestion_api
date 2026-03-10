@@ -23,4 +23,13 @@ public class FolderService {
         FolderEntity entity = mapper.toEntity(dto);
         repo.save(entity);
     }
+
+    public boolean existsById(Long id) {
+        return repo.existsById(id);
+    }
+
+    public FolderEntity getById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Folder with id " + id + " does not exist."));
+    }
 }

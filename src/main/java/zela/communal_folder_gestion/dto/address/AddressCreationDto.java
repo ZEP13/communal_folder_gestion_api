@@ -6,5 +6,5 @@ public record AddressCreationDto(
         String postalCode,
         String city,
         String number,
-        long folderId) {
+        Long folderId) {
 }

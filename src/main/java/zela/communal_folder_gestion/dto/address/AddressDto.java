@@ -7,5 +7,5 @@ public record AddressDto(
         String postalCode,
         String city,
         String number,
-        long folderId) {
+        Long folderId) {
 }

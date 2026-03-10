@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import zela.communal_folder_gestion.dto.address.AddressCreationDto;
 import zela.communal_folder_gestion.dto.address.AddressDto;
 import zela.communal_folder_gestion.entities.FinalAddressEntity;
+import zela.communal_folder_gestion.entities.FolderEntity;
 import zela.communal_folder_gestion.entities.PendingAddressEntity;
 import zela.communal_folder_gestion.mappers.AddressMapper;
 import zela.communal_folder_gestion.repositories.FinalAddressRepository;
@@ -19,10 +20,18 @@ public class AddressService {
 
     private final FinalAddressRepository finalRepo;
     private final PendingAddressRepository pendingRepo;
+    private final FolderService folderService;
     private final AddressMapper mapper;
 
     public AddressDto savePending(AddressCreationDto dto) {
+        if (!folderService.existsById(dto.folderId())) {
+            throw new IllegalArgumentException("Folder with id " + dto.folderId() + " does not exist.");
+        }
+        FolderEntity folder = folderService.getById(dto.folderId());
+
         PendingAddressEntity entity = mapper.toEntityFromCreationDto(dto);
+        entity.setFolder(folder);
+
         PendingAddressEntity saved = pendingRepo.save(entity);
         return mapper.toDtoFromPending(saved);
     }
