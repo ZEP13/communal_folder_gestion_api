@@ -19,26 +19,29 @@ public class AddressController {
 
     private final AddressService service;
 
-    @PutMapping("/{id}")
-    public void updateAddress(@PathVariable Long id, @RequestBody AddressCreationDto dto) {
-        service.updatePending(id, dto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePending(@PathVariable Long id) {
-        service.deletePending(id);
-    }
-
-    @DeleteMapping
-    public void deleteMultiPending(@RequestBody Long[] ids) {
-        for (Long id : ids) {
-            service.deletePending(id);
-        }
-    }
-
-    @PostMapping("/pending-addresses/{id}/cancel")
-    public void cancelPending(@PathVariable Long id) {
-        service.deletePending(id);
-
-    }
+    // @PutMapping("/{id}")
+    // public void updateAddress(@PathVariable Long id, @RequestBody
+    // AddressCreationDto dto) {
+    // service.updatePending(id, dto);
+    // }
+    //
+    // @DeleteMapping("/{id}")
+    // public void deletePending(@PathVariable Long id) {
+    // service.deletePending(id);
+    // }
+    //
+    // @DeleteMapping
+    // public void deleteMultiPending(@RequestBody Long[] ids) {
+    // for (Long id : ids) {
+    // service.deletePending(id);
+    // }
+    // }
+    //
+    // // POST /pending-addresses/{id}/cancel → annule une modification draft
+    // @PostMapping("/pending-addresses/{id}/cancel")
+    // public void cancelPending(@PathVariable Long id) {
+    // service.deletePending(id);
+    // }
+    //
+    //
 }
