@@ -36,9 +36,9 @@ public class AddressService {
         return mapper.toDtoFromPending(saved);
     }
 
-    public List<AddressDto> confirmSave() {
+    public List<AddressDto> confirmSaveByFolder(Long folderId) {
 
-        List<PendingAddressEntity> pendingList = pendingRepo.findAll();
+        List<PendingAddressEntity> pendingList = pendingRepo.findByFolderId(folderId);
 
         List<FinalAddressEntity> finalEntities = pendingList.stream()
                 .map(mapper::toEntityFromPending)
@@ -52,8 +52,39 @@ public class AddressService {
                 .toList();
     }
 
-    public void deletePending() {
-        pendingRepo.deleteAll();
+    public List<AddressDto> getAllAddressesByFolderId(Long folderId) {
+        List<FinalAddressEntity> finalEntities = finalRepo.findByFolderId(folderId);
+        List<PendingAddressEntity> pendingEntities = pendingRepo.findByFolderId(folderId);
+
+        List<AddressDto> finalDtos = finalEntities.stream()
+                .map(mapper::toDto)
+                .toList();
+
+        List<AddressDto> pendingDtos = pendingEntities.stream()
+                .map(mapper::toDtoFromPending)
+                .toList();
+
+        return List.of(finalDtos, pendingDtos).stream().flatMap(List::stream).toList();
+    }
+
+    public void deletePending(Long id) {
+        pendingRepo.deleteById(id);
+    }
+
+    public void updatePending(Long id, AddressCreationDto dto) {
+        if (!pendingRepo.existsById(id)) {
+            throw new IllegalArgumentException("Pending address with id " + id + " does not exist.");
+        }
+        if (!folderService.existsById(dto.folderId())) {
+            throw new IllegalArgumentException("Folder with id " + dto.folderId() + " does not exist.");
+        }
+        FolderEntity folder = folderService.getById(dto.folderId());
+
+        PendingAddressEntity entity = mapper.toEntityFromCreationDto(dto);
+        entity.setId(id);
+        entity.setFolder(folder);
+
+        pendingRepo.save(entity);
     }
 
     public List<?> getAllAddresses() {
