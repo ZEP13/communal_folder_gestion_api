@@ -7,5 +7,6 @@ public record AddressDto(
         String postalCode,
         String city,
         String number,
+        String status,
         Long folderId) {
 }

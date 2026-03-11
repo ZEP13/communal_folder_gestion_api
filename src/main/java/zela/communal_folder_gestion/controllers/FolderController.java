@@ -15,44 +15,42 @@ import zela.communal_folder_gestion.dto.folder.FolderCreationDto;
 import zela.communal_folder_gestion.services.AddressService;
 import zela.communal_folder_gestion.services.FolderService;
 
-// @AllArgsConstructor
-// @RestController
-// @RequestMapping("/folders")
-// public class FolderController {
-//
-// private final FolderService service;
-// private final AddressService addressService;
-//
-// @PostMapping("/save")
-// public void save(FolderCreationDto dto) {
-// service.save(dto);
-// }
-//
-// @DeleteMapping("/delete/{id}")
-// public void delete(@PathVariable long id) {
-// service.deleteFolder(id);
-// }
-//
-// @GetMapping("/{id}/addresses")
-// public ResponseEntity<Page<?>> getAddressesByFolderId(
-// @PathVariable long id,
-// @RequestParam(defaultValue = "0") int page,
-// @RequestParam(defaultValue = "10") int size) {
-//
-// if (!service.existsById(id)) {
-// return ResponseEntity.notFound().build();
-// }
-//
-// return ResponseEntity.ok(addressService.getAllAddressesByFolderId(id, page,
-// size));
-// }
-//
-// @PostMapping("/{id}/save")
-// public void saveAddressFolder(@PathVariable Long id) {
-// if (!service.existsById(id)) {
-// throw new IllegalArgumentException("Folder with id " + id + " does not
-// exist.");
-// }
-// addressService.confirmSaveByFolder(id);
-// }
-// }
+@AllArgsConstructor
+@RestController
+@RequestMapping("/folders")
+public class FolderController {
+
+    private final FolderService service;
+    private final AddressService addressService;
+
+    @PostMapping("/save")
+    public void save(FolderCreationDto dto) {
+        service.save(dto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable long id) {
+        service.deleteFolder(id);
+    }
+
+    @GetMapping("/{id}/addresses")
+    public ResponseEntity<Page<?>> getAddressesByFolderId(
+            @PathVariable long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(addressService.getAllAddressesByFolderId(id, page, size));
+    }
+
+    @PostMapping("/{id}/save")
+    public void saveAddressFolder(@PathVariable Long id) {
+        if (!service.existsById(id)) {
+            throw new IllegalArgumentException("Folder with id " + id + " does not exist.");
+        }
+        addressService.confirmSaveByFolder(id);
+    }
+}
