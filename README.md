@@ -39,7 +39,7 @@ Travail demandé
 Implémentez le backend permettant de gérer les modifications draft et de retourner la liste paginée des adresses, avec les changements visibles par l’utilisateur.
 
 ## V1 avec trois enités : Address, PendingAddress et MergedAddress
-![Illustration](v1_picture.jpg)
+![Illustration](v1_picture.png)
 
 # API Routes
 
