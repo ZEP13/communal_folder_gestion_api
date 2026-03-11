@@ -1,5 +1,6 @@
 package zela.communal_folder_gestion.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -38,25 +39,30 @@ public class AddressService {
     }
 
     public List<AddressDto> confirmSaveByFolder(Long folderId) {
-        if (!folderService.existsById(folderId)) {
-            throw new FolderNotFoundException(folderId);
-        }
+        List<AddressEntity> pendingNew = repo.findByFolderIdAndStatus(folderId, "PENDING");
+        List<AddressEntity> pendingUpdate = repo.findByFolderIdAndStatus(folderId, "PENDING_UPDATE");
 
-        List<AddressEntity> pendingList = repo.findByFolderIdAndStatus(folderId, "PENDING");
+        List<AddressEntity> allPending = new ArrayList<>();
+        allPending.addAll(pendingNew);
+        allPending.addAll(pendingUpdate);
 
-        pendingList.forEach(entity -> entity.setStatus("CONFIRMED"));
-        repo.saveAll(pendingList);
+        allPending.forEach(entity -> entity.setStatus("CONFIRMED"));
+        repo.saveAll(allPending);
 
-        return pendingList.stream()
-                .map(mapper::toDto)
-                .toList();
+        return allPending.stream().map(mapper::toDto).toList();
     }
 
     public void updateAddress(Long id, AddressCreationDto dto) {
         AddressEntity entity = repo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Address with id " + id + " does not exist."));
 
-        mapper.toEntityFromCreationDto(dto);
+        entity.setFullUserName(dto.fullUserName());
+        entity.setCity(dto.city());
+        entity.setStreet(dto.street());
+        entity.setPostalCode(dto.postalCode());
+        entity.setNumber(dto.number());
+        entity.setStatus("PENDING_UPDATE");
+
         repo.save(entity);
 
     }
@@ -84,7 +90,12 @@ public class AddressService {
         if (!folderService.existsById(folderId)) {
             throw new FolderNotFoundException(folderId);
         }
-        List<AddressEntity> pendingList = repo.findByFolderIdAndStatus(folderId, "PENDING");
-        repo.deleteAll(pendingList);
+
+        List<AddressEntity> pendingNew = repo.findByFolderIdAndStatus(folderId, "PENDING");
+        repo.deleteAll(pendingNew);
+
+        List<AddressEntity> pendingUpdate = repo.findByFolderIdAndStatus(folderId, "PENDING_UPDATE");
+        pendingUpdate.forEach(entity -> entity.setStatus("CONFIRMED"));
+        repo.saveAll(pendingUpdate);
     }
 }

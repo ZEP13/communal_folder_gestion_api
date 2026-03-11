@@ -30,7 +30,7 @@ public class AddressController {
     }
 
     @DeleteMapping
-    public void deleteMultiPending(@RequestBody Long[] ids) {
+    public void deleteMultiAddress(@RequestBody Long[] ids) {
         for (Long id : ids) {
             service.deleteAddress(id);
         }

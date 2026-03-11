@@ -1,17 +1,21 @@
 package zela.communal_folder_gestion.controllers;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
 import zela.communal_folder_gestion.dto.address.AddressCreationDto;
+import zela.communal_folder_gestion.dto.address.AddressDto;
 import zela.communal_folder_gestion.dto.folder.FolderCreationDto;
 import zela.communal_folder_gestion.services.AddressService;
 import zela.communal_folder_gestion.services.FolderService;
@@ -25,7 +29,7 @@ public class FolderController {
     private final AddressService addressService;
 
     @PostMapping("/save")
-    public void save(FolderCreationDto dto) {
+    public void save(@RequestBody FolderCreationDto dto) {
         service.save(dto);
     }
 
@@ -48,7 +52,7 @@ public class FolderController {
     }
 
     @PostMapping("/{id}/address")
-    public ResponseEntity<?> saveAddressToFolder(@PathVariable Long id, AddressCreationDto dto) {
+    public ResponseEntity<?> saveAddressToFolder(@PathVariable Long id, @RequestBody AddressCreationDto dto) {
 
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
@@ -59,10 +63,10 @@ public class FolderController {
     }
 
     @PostMapping("/{id}/save")
-    public void saveAddressFolder(@PathVariable Long id) {
+    public ResponseEntity<List<AddressDto>> saveAddressFolder(@PathVariable Long id) {
         if (!service.existsById(id)) {
-            throw new IllegalArgumentException("Folder with id " + id + " does not exist.");
+            return ResponseEntity.notFound().build();
         }
-        addressService.confirmSaveByFolder(id);
+        return ResponseEntity.ok(addressService.confirmSaveByFolder(id));
     }
 }
