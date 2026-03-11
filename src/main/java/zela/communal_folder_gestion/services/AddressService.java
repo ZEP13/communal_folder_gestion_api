@@ -25,11 +25,11 @@ public class AddressService {
     private final FolderService folderService;
     private final AddressMapper mapper;
 
-    public AddressDto savePending(AddressCreationDto dto) {
-        if (!folderService.existsById(dto.folderId())) {
-            throw new FolderNotFoundException(dto.folderId());
+    public AddressDto savePending(Long id, AddressCreationDto dto) {
+        if (!folderService.existsById(id)) {
+            throw new FolderNotFoundException(id);
         }
-        FolderEntity folder = folderService.getById(dto.folderId());
+        FolderEntity folder = folderService.getById(id);
 
         AddressEntity entity = mapper.toEntityFromCreationDto(dto);
         entity.setFolder(folder);
@@ -50,6 +50,22 @@ public class AddressService {
         return pendingList.stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    public void updateAddress(Long id, AddressCreationDto dto) {
+        AddressEntity entity = repo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Address with id " + id + " does not exist."));
+
+        mapper.toEntityFromCreationDto(dto);
+        repo.save(entity);
+
+    }
+
+    public void deleteAddress(Long id) {
+        if (!repo.existsById(id)) {
+            throw new IllegalArgumentException("Address with id " + id + " does not exist.");
+        }
+        repo.deleteById(id);
     }
 
     public Page<AddressDto> getAllAddressesByFolder(Long folderId, int page, int size) {

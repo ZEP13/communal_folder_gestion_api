@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
+import zela.communal_folder_gestion.dto.address.AddressCreationDto;
 import zela.communal_folder_gestion.dto.folder.FolderCreationDto;
 import zela.communal_folder_gestion.services.AddressService;
 import zela.communal_folder_gestion.services.FolderService;
@@ -44,6 +45,17 @@ public class FolderController {
         }
 
         return ResponseEntity.ok(addressService.getAllAddressesByFolder(id, page, size));
+    }
+
+    @PostMapping("/{id}/address")
+    public ResponseEntity<?> saveAddressToFolder(@PathVariable Long id, AddressCreationDto dto) {
+
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        addressService.savePending(id, dto);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{id}/save")
