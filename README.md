@@ -37,4 +37,27 @@ Endpoints suggérés
 Travail demandé
 
 Implémentez le backend permettant de gérer les modifications draft et de retourner la liste paginée des adresses, avec les changements visibles par l’utilisateur.
-# communal_folder_gestion_api
+
+
+# API Routes
+
+## Folder Routes
+
+| Method | Route | Action | JSON Body |
+|------|------|------|------|
+| POST | /folders/save | Create a new folder | `{ "name": "My Folder" }` |
+| DELETE | /folders/delete/{id} | Delete a folder | none |
+| GET | /folders/{id}/addresses?page=0&size=10 | Get addresses of a folder (paginated) | none |
+| POST | /folders/{id}/address | Add a pending address to a folder | `{ "fullUserName": "John Doe", "street": "Main Street", "postalCode": "6000", "city": "Charleroi", "number": "12" }` |
+| POST | /folders/{id}/save | Confirm and save all pending addresses in the folder | none |
+
+---
+
+## Address Routes
+
+| Method | Route | Action | JSON Body |
+|------|------|------|------|
+| PUT | /addresses/{id} | Update an address | `{ "fullUserName": "Jane Doe", "street": "Second Street", "postalCode": "1000", "city": "Brussels", "number": "45" }` |
+| DELETE | /addresses/{id} | Delete one address | none |
+| DELETE | /addresses | Delete multiple addresses | `[1,2,3]` |
+| POST | /addresses/pending-addresses/{id}/cancel | Cancel pending modifications for a folder | none |

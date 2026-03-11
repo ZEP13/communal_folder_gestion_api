@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +19,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@MappedSuperclass
 @Entity
 @Table(name = "address")
 public class AddressEntity {
@@ -48,9 +46,8 @@ public class AddressEntity {
     @ColumnDefault("'PENDING'")
     private String status;
 
-    @Column(name = "folder_id")
-    @JoinColumn(name = "folder_id", referencedColumnName = "id")
     @ManyToOne
+    @JoinColumn(name = "folder_id", referencedColumnName = "id")
     private FolderEntity folder;
 
 }

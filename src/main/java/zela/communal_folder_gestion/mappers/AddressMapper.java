@@ -1,9 +1,12 @@
 package zela.communal_folder_gestion.mappers;
 
+import org.springframework.stereotype.Component;
+
 import zela.communal_folder_gestion.dto.address.AddressCreationDto;
 import zela.communal_folder_gestion.dto.address.AddressDto;
 import zela.communal_folder_gestion.entities.AddressEntity;
 
+@Component
 public class AddressMapper {
 
     public AddressDto toDto(AddressEntity entity) {
