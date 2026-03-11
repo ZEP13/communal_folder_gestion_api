@@ -1,7 +1,7 @@
 package zela.communal_folder_gestion.dto.address;
 
 public record AddressDto(
-        long id,
+        Long id,
         String fullUserName,
         String street,
         String postalCode,

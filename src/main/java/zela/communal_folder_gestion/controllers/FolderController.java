@@ -43,7 +43,7 @@ public class FolderController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(addressService.getAllAddressesByFolderId(id, page, size));
+        return ResponseEntity.ok(addressService.getAllAddressesByFolder(id, page, size));
     }
 
     @PostMapping("/{id}/save")
