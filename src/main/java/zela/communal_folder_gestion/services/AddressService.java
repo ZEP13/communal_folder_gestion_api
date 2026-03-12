@@ -79,10 +79,13 @@ public class AddressService {
             throw new FolderNotFoundException(folderId);
         }
         Pageable pageable = PageRequest.of(page, size);
+
         Page<AddressEntity> addressPage = repo.findByFolderId(folderId, pageable);
+
         List<AddressDto> dtos = addressPage.getContent().stream()
                 .map(mapper::toDto)
                 .toList();
+
         return new PageImpl<>(dtos, pageable, addressPage.getTotalElements());
     }
 

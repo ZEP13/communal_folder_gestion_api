@@ -37,6 +37,8 @@ public class AddressController {
     }
 
     // POST /pending-addresses/{id}/cancel → annule une modification draft
+    // a faire pour cancel mais aussi au refresh de la page, si une adresse est en
+    // draft, elle doit être annulée
     @PostMapping("/pending-addresses/{id}/cancel")
     public void cancelPending(@PathVariable Long id) {
         service.cancelPendingByFolder(id);
